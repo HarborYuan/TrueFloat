@@ -1,6 +1,4 @@
 #include <iostream>
-#include <bitset>
-#include <cstdlib>
 #include "TrueFloat.hpp"
 
 int main()

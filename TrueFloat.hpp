@@ -1,4 +1,7 @@
 #include <iostream>
+#ifdef DEBUG
+#include <bitset>
+#endif
 
 const uint64_t frac_mask = uint64_t(uint64_t(1)<<52)+~0;
 const uint64_t exp_mask = (uint64_t(uint64_t(1)<<11)+~0)<<52;
@@ -38,10 +41,16 @@ class truef32
                 valid = true;
                 value = 0;
             }
+            #ifdef DEBUG
+            std::cout<<std::bitset<8*sizeof(uint32_t)>(value)<<std::endl;
+            #endif
             if (sign)
             {
                 value = ~value + 1;
             }
+            #ifdef DEBUG
+            std::cout<<std::bitset<8*sizeof(uint32_t)>(value)<<std::endl;
+            #endif
             return;
         }
 
