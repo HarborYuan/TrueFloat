@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #ifdef DEBUG
 #include <bitset>
@@ -15,7 +16,7 @@ class truef32
         bool valid;
         truef32(double input)
         {
-            uint64_t input_u64 =*((uint64_t *)(&input));
+            uint64_t input_u64 = reinterpret_cast<uint64_t &>(input);
             uint64_t frac = frac_mask & input_u64;
             int exp = (exp_mask & input_u64) >> 52;
             bool sign = bool((sign_mask & input_u64)>>63);
