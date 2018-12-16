@@ -1,3 +1,3 @@
 project(truefloat)
 
-add_executable(truefloat truefloat.cpp)
+add_executable(truefloat.elf truefloat.cpp)
