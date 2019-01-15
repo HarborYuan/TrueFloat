@@ -1,22 +1,21 @@
-#include <iostream>
-#include <sstream>
 #include "truefloat.hpp"
 
-std::string
-TrueFloat32::formatOut(uint bitNum) {
+std::string TrueFloat32::formatOut(uint bitNum) {
   if (bitNum < 32) {
     std::cout << "TrueFloat32 :: formatOut() : bitNum is too small!";
     return std::string();
   }
+  std::ostringstream test;
+  test << std::noshowbase << std::hex << *this;
+  int len = test.str().length();
   std::ostringstream output;
   output << "0x";
-  output << std::string((bitNum - 32) / 4, isPositive ? '0' : 'f');
+  output << std::string((bitNum - len * 4) / 4, isPositive ? '0' : 'f');
   output << std::noshowbase << std::hex << *this << std::endl;
   return output.str();
 }
 
-std::ostream &
-operator<<(std::ostream &os, const TrueFloat32 &f32) {
+std::ostream &operator<<(std::ostream &os, const TrueFloat32 &f32) {
   if (f32.valid) {
     os << std::hex << f32.value << std::dec;
   } else {
@@ -44,9 +43,8 @@ TrueFloat32::TrueFloat32(double input) {
   value = isPositive ? value : ~value + 1;
 }
 
-int
-main() {
-  TrueFloat32 test_tf32_1(0.25);
+int main() {
+  TrueFloat32 test_tf32_1(double(1) / 1024);
   std::cout << test_tf32_1.formatOut(36) << std::endl;
   return 0;
 }

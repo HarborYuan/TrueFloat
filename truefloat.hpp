@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <sstream>
 
 const uint64_t frac_mask = 0x000fffffffffffff;
 const uint64_t exp_mask = 0x7ff0000000000000;
@@ -11,8 +12,7 @@ class TrueFloat32 {
   bool valid;
   bool isPositive;
   explicit TrueFloat32(double input);
-  friend std::ostream &
-  operator<<(std::ostream &os, const TrueFloat32 &f32);
+  friend std::ostream &operator<<(std::ostream &os, const TrueFloat32 &f32);
   std::string
   formatOut(uint bitNum);
 };
