@@ -1,23 +1,12 @@
 #include "truefloat.hpp"
 
-std::string TrueFloat32::formatOut(uint bitNum) {
-  if (bitNum < 32) {
-    std::cout << "TrueFloat32 :: formatOut() : bitNum is too small!";
-    return std::string();
-  }
-  std::ostringstream test;
-  test << std::noshowbase << std::hex << *this;
-  int len = test.str().length();
-  std::ostringstream output;
-  output << "0x";
-  output << std::string((bitNum - len * 4) / 4, isPositive ? '0' : 'f');
-  output << std::noshowbase << std::hex << *this << std::endl;
-  return output.str();
-}
-
 std::ostream &operator<<(std::ostream &os, const TrueFloat32 &f32) {
   if (f32.valid) {
-    os << std::hex << f32.value << std::dec;
+    if (f32.sign) {
+      os << std::hex << r - mpz_class(f32.value) << std::dec;
+    } else {
+      os << std::hex << f32.value << std::dec;
+    }
   } else {
     os << "TrueFloat32 : Invalid Number";
   }
@@ -28,23 +17,16 @@ TrueFloat32::TrueFloat32(double input) {
   uint64_t input_u64 = reinterpret_cast<uint64_t &>(input);
   uint64_t frac = frac_mask & input_u64;
   int64_t exp = (exp_mask & input_u64) >> 52;
-  bool sign = bool((sign_mask & input_u64) >> 63);
+  sign = bool((sign_mask & input_u64) >> 63);
   valid = exp < 1023;
-  if (exp - 1023 + 11 >= 0) {
-    uint64_t mid_value = (frac | ((uint64_t) (1) << 52)) << (exp - 1023 + 11);
+  if (exp - 1023 + 12 >= 0) {
+    uint64_t mid_value = (frac | ((uint64_t) (1) << 52)) << (exp - 1023 + 12);
     value = static_cast<uint32_t >(mid_value >> 32);
-  } else if (exp - 1023 + 11 < 0 && exp - 1023 + 11 >= -52) {
-    uint64_t mid_value = (frac | ((uint64_t) (1) << 52)) >> -(exp - 1023 + 11);
+  } else if (exp - 1023 + 12 < 0 && exp - 1023 + 12 >= -52) {
+    uint64_t mid_value = (frac | ((uint64_t) (1) << 52)) >> -(exp - 1023 + 12);
     value = static_cast<uint32_t >(mid_value >> 32);
   } else {
     value = 0;
   }
-  isPositive = !sign;
-  value = isPositive ? value : ~value + 1;
 }
 
-int main() {
-  TrueFloat32 test_tf32_1(double(1) / 1024);
-  std::cout << test_tf32_1.formatOut(36) << std::endl;
-  return 0;
-}
