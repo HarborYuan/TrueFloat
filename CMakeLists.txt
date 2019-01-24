@@ -14,7 +14,7 @@ message("${GMP_LIBRARIES}")
 include_directories(GMP_INCLUDE_DIR)
 
 set(CMAKE_CXX_STANDARD 17)
-set(SOURCE_FILES main.cpp truefloat.cpp truefloat.hpp main.cpp)
+set(SOURCE_FILES main.cpp truefloat.cpp truefloat.hpp)
 
 add_executable(truefloat ${SOURCE_FILES})
 target_link_libraries(truefloat "${GMP_LIBRARIES}" "${GMPXX_LIBRARIES}")
